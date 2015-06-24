@@ -3,5 +3,7 @@ eclipse
 build
 .gradle
 *.txt
-*.jar
+json-io-4.0.1.jar
+json-io-4.0.1-sources.jar
+json-io-4.0.1-javadoc.jar
 Jsoner.iml
