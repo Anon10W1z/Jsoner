@@ -5,7 +5,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import io.github.anon10w1z.jsoner.blocks.JsonerBlock;
 import io.github.anon10w1z.jsoner.blocks.JsonerMetadataBlock;
-import io.github.anon10w1z.jsoner.items.*;
+import io.github.anon10w1z.jsoner.items.JsonerItem;
+import io.github.anon10w1z.jsoner.items.JsonerMetadataItem;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -26,12 +27,15 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The main mod file of Jsoner
  */
-@Mod(modid = "jsoner", version = "2.0", name = "Jsoner", dependencies = "after:*")
+@Mod(modid = "jsoner", version = "2.1", name = "Jsoner", dependencies = "after:*")
 @SuppressWarnings("unused")
 public final class Jsoner {
 	/**

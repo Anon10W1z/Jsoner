@@ -1,9 +1,20 @@
 package io.github.anon10w1z.jsoner.items;
 
+import com.google.common.collect.Lists;
+import io.github.anon10w1z.jsoner.blocks.JsonerBlock;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.*;
-import net.minecraft.util.StatCollector;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Wrapper class for items
@@ -23,8 +34,10 @@ public class JsonerItem {
 	private boolean isPotionIngredient;
 	private boolean isBeaconPayment;
 	private boolean repairable;
+	private int fuelValue;
+	private List<JsonerRecipe> recipes = Lists.newArrayList();
 
-	protected JsonerItem(Item item, int metadata) {
+	protected JsonerItem(Item item, int metadata, boolean showRecipes) {
 		this.id = Item.getIdFromItem(item);
 		this.metadata = metadata;
 		ItemStack itemstack = new ItemStack(item, 1, metadata);
@@ -44,6 +57,21 @@ public class JsonerItem {
 		this.isPotionIngredient = item.isPotionIngredient(itemstack);
 		this.isBeaconPayment = item.isBeaconPayment(itemstack);
 		this.repairable = item.isRepairable();
+		this.fuelValue = TileEntityFurnace.getItemBurnTime(itemstack);
+		if (showRecipes)
+			for (Object recipeObject : CraftingManager.getInstance().getRecipeList()) {
+				ItemStack recipeOutput = ((IRecipe) recipeObject).getRecipeOutput();
+				if (recipeOutput != null && recipeOutput.getItem() == item && recipeOutput.getMetadata() == metadata) {
+					List<Object> inputs = Lists.newArrayList();
+					Function<ItemStack, Object> stackToJsonerFunction = stack -> stack == null ? null : stack.getItem() instanceof ItemBlock ? JsonerBlock.ofNoRecipes(((ItemBlock) stack.getItem()).block, stack.getMetadata()) : JsonerItem.ofNoRecipes(stack.getItem(), stack.getMetadata());
+					if (recipeObject instanceof ShapedRecipes)
+						inputs.addAll(Arrays.stream(((ShapedRecipes) recipeObject).recipeItems).map(stackToJsonerFunction).collect(Collectors.toList()));
+					if (recipeObject instanceof ShapelessRecipes)
+						((ShapelessRecipes) recipeObject).recipeItems.forEach(itemstackObject -> inputs.add(stackToJsonerFunction.apply((ItemStack) itemstackObject)));
+
+					this.recipes.add(JsonerRecipe.of(inputs, recipeOutput.stackSize));
+				}
+			}
 	}
 
 	public static JsonerItem of(Item item, int metadata) {
@@ -55,6 +83,14 @@ public class JsonerItem {
 			return new JsonerItemPotion(item, metadata);
 		if (item instanceof ItemFood)
 			return new JsonerItemFood(item, metadata);
-		return new JsonerItem(item, metadata);
+		if (item instanceof ItemHangingEntity)
+			return new JsonerItemHangingEntity(item, metadata);
+		return new JsonerItem(item, metadata, true);
+	}
+
+	public static JsonerItem ofNoRecipes(Item item, int metadata) {
+		JsonerItem jsonerItem = of(item, metadata);
+		jsonerItem.recipes.clear();
+		return jsonerItem;
 	}
 }

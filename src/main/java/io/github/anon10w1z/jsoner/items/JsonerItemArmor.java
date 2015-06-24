@@ -15,7 +15,7 @@ public class JsonerItemArmor extends JsonerItem {
 	private String armorMaterial;
 
 	protected JsonerItemArmor(Item item) {
-		super(item, 0);
+		super(item, 0, true);
 		ItemArmor armor = (ItemArmor) item;
 		this.armorType = armor.armorType;
 		this.damageReduceAmount = armor.damageReduceAmount;

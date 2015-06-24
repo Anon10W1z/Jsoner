@@ -13,7 +13,7 @@ public class JsonerItemPotion extends JsonerItem {
 	private List effects;
 
 	protected JsonerItemPotion(Item item, int metadata) {
-		super(item, metadata);
+		super(item, metadata, true);
 		ItemPotion potion = (ItemPotion) item;
 		List<PotionEffect> effects = potion.getEffects(metadata);
 		if (effects == null)

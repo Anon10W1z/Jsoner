@@ -11,7 +11,7 @@ public class JsonerItemTool extends JsonerItem {
 	private String toolMaterial;
 
 	protected JsonerItemTool(Item item) {
-		super(item, 0);
+		super(item, 0, true);
 		this.toolMaterial = ((ItemTool) item).getToolMaterialName();
 	}
 }
