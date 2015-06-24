@@ -1,0 +1,57 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+    }
+}
+
+apply plugin: 'forge'
+version = "2.0"
+group = "io.github.anon10w1z.jsoner"
+archivesBaseName = "jsoner"
+
+apply plugin: 'java'
+targetCompatibility = "1.8"
+sourceCompatibility = "1.8"
+
+dependencies {
+    compile "com.cedarsoftware:json-io:4.0.1"
+}
+
+minecraft {
+    version = "1.8-11.14.1.1419"
+    runDir = "eclipse"
+
+    mappings = "snapshot_20141130"
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand 'version': project.version, 'mcversion': project.minecraft.version
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+apply plugin: 'idea'
+idea {
+    module {
+        inheritOutputDirs = true
+    }
+} //for assets to work with IntelliJ

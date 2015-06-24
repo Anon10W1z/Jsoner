@@ -1,0 +1,7 @@
+.idea
+eclipse
+build
+.gradle
+*.txt
+*.jar
+Jsoner.iml
