@@ -5,7 +5,8 @@ import com.google.common.collect.Sets;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import java.util.*;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Wrapper class for metadata items
@@ -21,7 +22,7 @@ public class JsonerMetadataItem {
 		for (ItemStack itemstack : itemSubItems)
 			validMetadata.add(itemstack.getMetadata());
 		for (int metadata : validMetadata)
-			subItems.add(JsonerItem.of(item, metadata));
+			subItems.add(JsonerItem.of(item, metadata, true));
 	}
 
 	public static JsonerMetadataItem of(Item item) {

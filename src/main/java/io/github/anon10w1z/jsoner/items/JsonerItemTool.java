@@ -10,8 +10,8 @@ import net.minecraft.item.ItemTool;
 public class JsonerItemTool extends JsonerItem {
 	private String toolMaterial;
 
-	protected JsonerItemTool(Item item) {
-		super(item, 0, true);
+	protected JsonerItemTool(Item item, boolean showRecipes) {
+		super(item, 0, showRecipes);
 		this.toolMaterial = ((ItemTool) item).getToolMaterialName();
 	}
 }

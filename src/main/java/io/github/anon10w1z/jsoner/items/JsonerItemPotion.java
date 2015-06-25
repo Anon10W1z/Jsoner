@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 public class JsonerItemPotion extends JsonerItem {
 	private List effects;
 
-	protected JsonerItemPotion(Item item, int metadata) {
-		super(item, metadata, true);
+	protected JsonerItemPotion(Item item, int metadata, boolean showRecipes) {
+		super(item, metadata, showRecipes);
 		ItemPotion potion = (ItemPotion) item;
 		List<PotionEffect> effects = potion.getEffects(metadata);
 		if (effects == null)

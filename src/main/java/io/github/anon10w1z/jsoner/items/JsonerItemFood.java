@@ -15,8 +15,8 @@ public class JsonerItemFood extends JsonerItem {
 	private JsonerPotionEffect potionEffect;
 	private float potionEffectProbability;
 
-	protected JsonerItemFood(Item item, int metadata) {
-		super(item, metadata, true);
+	protected JsonerItemFood(Item item, int metadata, boolean showRecipes) {
+		super(item, metadata, showRecipes);
 		ItemFood food = (ItemFood) item;
 		ItemStack foodStack = new ItemStack(food, 1, metadata);
 		this.healAmount = food.getHealAmount(foodStack);

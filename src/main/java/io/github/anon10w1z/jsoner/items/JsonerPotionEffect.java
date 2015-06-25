@@ -19,7 +19,7 @@ public class JsonerPotionEffect {
 		this.duration = potionEffect.getDuration();
 		this.amplifier = potionEffect.getAmplifier();
 		this.isSplash = potionEffect.toString().contains("Splash: true");
-		this.curativeItems = potionEffect.getCurativeItems().stream().map(itemstack -> JsonerItem.of(itemstack.getItem(), itemstack.getMetadata())).collect(Collectors.toList());
+		this.curativeItems = potionEffect.getCurativeItems().stream().map(itemstack -> JsonerItem.of(itemstack.getItem(), itemstack.getMetadata(), true)).collect(Collectors.toList());
 	}
 
 	public static JsonerPotionEffect of(PotionEffect potionEffect) {

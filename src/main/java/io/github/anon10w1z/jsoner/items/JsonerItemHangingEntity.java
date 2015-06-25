@@ -8,8 +8,8 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 public class JsonerItemHangingEntity extends JsonerItem {
 	private String hangingEntity;
 
-	protected JsonerItemHangingEntity(Item item, int metadata) {
-		super(item, metadata, true);
+	protected JsonerItemHangingEntity(Item item, int metadata, boolean showRecipes) {
+		super(item, metadata, false);
 		Class entityClass = ReflectionHelper.getPrivateValue(ItemHangingEntity.class, (ItemHangingEntity) item, "hangingEntityClass", "field_82811_a");
 		this.hangingEntity = entityClass.getName().substring(entityClass.getName().lastIndexOf('.') + 1);
 	}

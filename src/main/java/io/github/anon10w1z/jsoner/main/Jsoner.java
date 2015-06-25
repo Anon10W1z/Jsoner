@@ -1,13 +1,13 @@
 package io.github.anon10w1z.jsoner.main;
 
 import com.cedarsoftware.util.io.JsonWriter;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import io.github.anon10w1z.jsoner.blocks.JsonerBlock;
 import io.github.anon10w1z.jsoner.blocks.JsonerMetadataBlock;
 import io.github.anon10w1z.jsoner.items.JsonerItem;
 import io.github.anon10w1z.jsoner.items.JsonerMetadataItem;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.Mod;
@@ -35,7 +35,7 @@ import java.util.Map;
 /**
  * The main mod file of Jsoner
  */
-@Mod(modid = "jsoner", version = "2.1", name = "Jsoner", dependencies = "after:*")
+@Mod(modid = "jsoner", version = "2.1", name = "Jsoner", dependencies = "after:*", clientSideOnly = true)
 @SuppressWarnings("unused")
 public final class Jsoner {
 	/**
@@ -122,6 +122,7 @@ public final class Jsoner {
 	/**
 	 * Writes all blocks to JSON
 	 */
+	@SuppressWarnings("unchecked")
 	private void writeBlocks() {
 		logger.info("Writing blocks to JSON");
 		try {
@@ -142,10 +143,12 @@ public final class Jsoner {
 					blockFile.createNewFile();
 					OutputStream outputStream = new FileOutputStream(blockFile);
 					JsonWriter jsonWriter = new JsonWriter(outputStream, writerArgs);
-					List<Block> subBlocks = Lists.newArrayList();
-					block.getSubBlocks(Item.getItemFromBlock(block), null, subBlocks);
-					if (subBlocks.size() <= 1)
-						jsonWriter.write(JsonerBlock.of(block, 0));
+					List<IBlockState> stateList = block.getBlockState().getValidStates();
+					int maxMetadata = 0;
+					for (Object blockStateObject : stateList)
+						maxMetadata = Math.max(maxMetadata, block.getMetaFromState((IBlockState) blockStateObject));
+					if (maxMetadata == 0)
+						jsonWriter.write(JsonerBlock.of(block, 0, true));
 					else
 						jsonWriter.write(JsonerMetadataBlock.of(block));
 					jsonWriter.close();
@@ -180,7 +183,7 @@ public final class Jsoner {
 					OutputStream outputStream = new FileOutputStream(itemFile);
 					JsonWriter jsonWriter = new JsonWriter(outputStream, writerArgs);
 					if (!item.getHasSubtypes())
-						jsonWriter.write(JsonerItem.of(item, 0));
+						jsonWriter.write(JsonerItem.of(item, 0, true));
 					else
 						jsonWriter.write(JsonerMetadataItem.of(item));
 					jsonWriter.close();
